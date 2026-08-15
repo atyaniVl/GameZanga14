@@ -7,6 +7,7 @@ public class AimController : MonoBehaviour
     [SerializeField] private Transform aimPivot;
     [SerializeField] private Transform playerVisuals;
 
+
     private void Update()
     {
         Vector2 mouseScreenPosition = Mouse.current.position.ReadValue();

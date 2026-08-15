@@ -1,0 +1,351 @@
+fileFormatVersion: 2
+guid: 9559a5d813f76be4abcc8f25572cea9d
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1742336136834769180
+    second: Player sheet_0
+  - first:
+      213: 3074431277309791150
+    second: Player sheet_1
+  - first:
+      213: 4642554918551752513
+    second: Player sheet_2
+  - first:
+      213: 3797444777879391916
+    second: Player sheet_3
+  - first:
+      213: -2973795492906546516
+    second: Player sheet_4
+  - first:
+      213: -7736105388341479575
+    second: Player sheet_5
+  - first:
+      213: -6577420749403384212
+    second: Player sheet_6
+  - first:
+      213: -7875484342070154616
+    second: Player sheet_7
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Player sheet_0
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 741
+        width: 190
+        height: 254
+      alignment: 9
+      pivot: {x: 0.46519503, y: 0.20617507}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c11ec533c750e2810800000000000000
+      internalID: 1742336136834769180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player sheet_1
+      rect:
+        serializedVersion: 2
+        x: 250
+        y: 390
+        width: 153
+        height: 313
+      alignment: 9
+      pivot: {x: 0.50401294, y: 0.12140458}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eab866a25f29aaa20800000000000000
+      internalID: 3074431277309791150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player sheet_2
+      rect:
+        serializedVersion: 2
+        x: 453
+        y: 555
+        width: 80
+        height: 175
+      alignment: 9
+      pivot: {x: 0.4999996, y: 0.8333095}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14f0582e91bad6040800000000000000
+      internalID: 4642554918551752513
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player sheet_3
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 291
+        width: 104
+        height: 182
+      alignment: 9
+      pivot: {x: 0.50946075, y: 0.77571106}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: caec9afd7eb33b430800000000000000
+      internalID: 3797444777879391916
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player sheet_4
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 455
+        width: 54
+        height: 90
+      alignment: 9
+      pivot: {x: 0.45451865, y: 0.94343805}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: caac5aa41c4fab6d0800000000000000
+      internalID: -2973795492906546516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player sheet_5
+      rect:
+        serializedVersion: 2
+        x: 500
+        y: 336
+        width: 59
+        height: 104
+      alignment: 9
+      pivot: {x: 0.323087, y: 0.91326344}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 967bbee0325d3a490800000000000000
+      internalID: -7736105388341479575
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player sheet_6
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 152
+        width: 96
+        height: 126
+      alignment: 9
+      pivot: {x: 0.50984067, y: 0.89737374}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6617855dae48b4a0800000000000000
+      internalID: -6577420749403384212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player sheet_7
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 24
+        width: 128
+        height: 101
+      alignment: 9
+      pivot: {x: 0.24168289, y: 0.9115533}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88ae1cc87b8a4b290800000000000000
+      internalID: -7875484342070154616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: f4af2c9861edf724e8e55b72a15708ce
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Player sheet_0: 1742336136834769180
+      Player sheet_1: 3074431277309791150
+      Player sheet_2: 4642554918551752513
+      Player sheet_3: 3797444777879391916
+      Player sheet_4: -2973795492906546516
+      Player sheet_5: -7736105388341479575
+      Player sheet_6: -6577420749403384212
+      Player sheet_7: -7875484342070154616
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

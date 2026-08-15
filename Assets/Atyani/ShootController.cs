@@ -14,6 +14,13 @@ public class ShootController : MonoBehaviour
     [SerializeField] private float maxSpeed = 15f;
     [SerializeField] private float maxHoldTime = 1.5f;
 
+
+    [Header("Sling")]
+    [SerializeField] private GameObject slingStringNormal;
+    [SerializeField] private GameObject slingStringPull;
+
+    [SerializeField] private AimCursorController aimCursor;
+
     private float pullStartTime;
     private float currentShootSpeed;
 
@@ -27,10 +34,25 @@ public class ShootController : MonoBehaviour
             StartPull();
         }
 
+        if (Mouse.current.leftButton.isPressed)
+        {
+            UpdateChargeVisual();
+        }
+
         if (Mouse.current.leftButton.wasReleasedThisFrame)
         {
             Release();
         }
+    }
+    private void UpdateChargeVisual()
+    {
+        float holdTime = Time.time - pullStartTime;
+
+        float chargePercent = Mathf.Clamp01(
+            holdTime / maxHoldTime
+        );
+
+        aimCursor.SetCharge(chargePercent);
     }
 
     private void StartPull()
@@ -38,6 +60,11 @@ public class ShootController : MonoBehaviour
         pullStartTime = Time.time;
 
         animator.SetTrigger(AttackPull);
+
+        slingStringNormal.SetActive(false);
+        slingStringPull.SetActive(true);
+
+        aimCursor.SetPull();
     }
 
     private void Release()
@@ -54,7 +81,17 @@ public class ShootController : MonoBehaviour
             chargePercent
         );
 
+        slingStringNormal.SetActive(true);
+        slingStringPull.SetActive(false);
+
         animator.SetTrigger(AttackRelease);
+    }
+
+    //Called via animation event during Attack_Release
+
+    public void FinishRelease()
+    {
+        aimCursor.SetNormal();
     }
 
     // Called by Animation Event during Attack_Release
@@ -70,7 +107,7 @@ public class ShootController : MonoBehaviour
             )
         );
 
-        Vector2 direction =
+        /**/Vector2 direction =
             (mouseWorldPosition - firePoint.position).normalized;
 
         RockProjectile rock = Instantiate(

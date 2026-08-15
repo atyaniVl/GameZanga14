@@ -2,18 +2,13 @@ using UnityEngine;
 
 public class RockProjectile : MonoBehaviour
 {
-    private float speed;
-    private Vector2 direction;
+    [Header("References")]
+    [SerializeField] private Rigidbody2D rb;
 
-    public void Initialize(Vector2 shootDirection, float shootSpeed)
+    public void Initialize(Vector2 direction, float speed)
     {
-        direction = shootDirection.normalized;
-        speed = shootSpeed;
-    }
+        direction.Normalize();
 
-    private void Update()
-    {
-        transform.position +=
-            (Vector3)(direction * speed * Time.deltaTime);
+        rb.linearVelocity = direction * speed;
     }
 }
