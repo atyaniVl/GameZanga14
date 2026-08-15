@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Key
+  - MapPiece
+  - PlayerProjectile
+  - EnemyProjectile
   layers:
   - Default
   - TransparentFX
@@ -34,8 +38,8 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
+  - Player
+  - Ladder
   - Ground
   m_SortingLayers:
   - name: Default

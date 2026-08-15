@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class TestHazard : MonoBehaviour
 {
-    [SerializeField] private float damageAmount = 20f;
+    [SerializeField] private int damageAmount = 20;
 
     private void OnTriggerEnter2D(Collider2D other)
     {

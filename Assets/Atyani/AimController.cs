@@ -7,55 +7,71 @@ public class AimController : MonoBehaviour
     [SerializeField] private Transform aimPivot;
     [SerializeField] private Transform playerVisuals;
 
+    public bool FacingRight { get; private set; } = true;
 
     private void Update()
     {
-        Vector2 mouseScreenPosition = Mouse.current.position.ReadValue();
+        Vector2 mouseScreenPosition =
+            Mouse.current.position.ReadValue();
 
-        Vector3 mouseWorldPosition = mainCamera.ScreenToWorldPoint(
-            new Vector3(
-                mouseScreenPosition.x,
-                mouseScreenPosition.y,
-                -mainCamera.transform.position.z
-            )
-        );
+        Vector3 mouseWorldPosition =
+            mainCamera.ScreenToWorldPoint(
+                new Vector3(
+                    mouseScreenPosition.x,
+                    mouseScreenPosition.y,
+                    -mainCamera.transform.position.z
+                )
+            );
 
-        Vector2 direction = mouseWorldPosition - aimPivot.position;
+        mouseWorldPosition.z = 0f;
 
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        Vector2 direction =
+            mouseWorldPosition - aimPivot.position;
 
-        aimPivot.rotation = Quaternion.Euler(0f, 0f, angle);
-
+        Aim(direction);
         HandleFlip(direction);
+    }
+
+    private void Aim(Vector2 direction)
+    {
+        float angle =
+            Mathf.Atan2(direction.y, direction.x) *
+            Mathf.Rad2Deg;
+
+        aimPivot.rotation =
+            Quaternion.Euler(0f, 0f, angle);
     }
 
     private void HandleFlip(Vector2 direction)
     {
-        Vector3 scale = playerVisuals.localScale;
+        if (Mathf.Abs(direction.x) < 0.01f)
+            return;
 
-        if (direction.x > 0)
-        {
-            scale.x = Mathf.Abs(scale.x);
-        }
-        else if (direction.x < 0)
-        {
-            scale.x = -Mathf.Abs(scale.x);
-        }
+        bool shouldFaceRight = direction.x > 0f;
 
-        playerVisuals.localScale = scale;
+        if (shouldFaceRight == FacingRight)
+            return;
 
+        FacingRight = shouldFaceRight;
 
-        Vector3 scale2 = aimPivot.localScale;
+        Vector3 visualScale =
+            playerVisuals.localScale;
 
-        if (direction.x > 0)
-        {
-            scale2.y = Mathf.Abs(scale2.y);
-        }
-        else if (direction.x < 0)
-        {
-            scale2.y = -Mathf.Abs(scale2.y);
-        }
+        visualScale.x =
+            shouldFaceRight
+                ? Mathf.Abs(visualScale.x)
+                : -Mathf.Abs(visualScale.x);
 
-        aimPivot.localScale = scale2;
+        playerVisuals.localScale = visualScale;
+
+        Vector3 aimScale =
+            aimPivot.localScale;
+
+        aimScale.y =
+            shouldFaceRight
+                ? Mathf.Abs(aimScale.y)
+                : -Mathf.Abs(aimScale.y);
+
+        aimPivot.localScale = aimScale;
     }
 }

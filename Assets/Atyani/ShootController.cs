@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,6 +15,8 @@ public class ShootController : MonoBehaviour
     [SerializeField] private float maxSpeed = 15f;
     [SerializeField] private float maxHoldTime = 1.5f;
 
+    [Header("Rocks")]
+    [SerializeField] private int startingRocks = 60;
 
     [Header("Sling")]
     [SerializeField] private GameObject slingStringNormal;
@@ -24,19 +27,48 @@ public class ShootController : MonoBehaviour
     private float pullStartTime;
     private float currentShootSpeed;
 
-    private static readonly int AttackPull = Animator.StringToHash("Pull Trigger");
-    private static readonly int AttackRelease = Animator.StringToHash("Release Trigger");
+    private int currentRocks;
+
+    public int CurrentRocks => currentRocks;
+
+    public event Action<int> OnRocksChanged;
+
+    private static readonly int AttackPull =
+        Animator.StringToHash("Pull Trigger");
+
+    private static readonly int AttackRelease =
+        Animator.StringToHash("Release Trigger");
+
+
+    private void Awake()
+    {
+        currentRocks = startingRocks;
+    }
+
+    private void Start()
+    {
+        OnRocksChanged?.Invoke(currentRocks);
+    }
+
 
     private void Update()
     {
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
+            // Don't start the attack if there are no rocks.
+            if (currentRocks <= 0)
+                return;
+
             StartPull();
         }
 
         if (Mouse.current.leftButton.isPressed)
         {
-            UpdateChargeVisual();
+            // Only update charge while actually pulling.
+            if (currentRocks > 0)
+            {
+                UpdateChargeVisual();
+            }
         }
 
         if (Mouse.current.leftButton.wasReleasedThisFrame)
@@ -44,16 +76,21 @@ public class ShootController : MonoBehaviour
             Release();
         }
     }
+
+
     private void UpdateChargeVisual()
     {
-        float holdTime = Time.time - pullStartTime;
+        float holdTime =
+            Time.time - pullStartTime;
 
-        float chargePercent = Mathf.Clamp01(
-            holdTime / maxHoldTime
-        );
+        float chargePercent =
+            Mathf.Clamp01(
+                holdTime / maxHoldTime
+            );
 
         aimCursor.SetCharge(chargePercent);
     }
+
 
     private void StartPull()
     {
@@ -67,19 +104,32 @@ public class ShootController : MonoBehaviour
         aimCursor.SetPull();
     }
 
+
     private void Release()
     {
-        float holdTime = Time.time - pullStartTime;
+        // Safety check.
+        if (currentRocks <= 0)
+            return;
 
-        holdTime = Mathf.Clamp(holdTime, 0f, maxHoldTime);
+        float holdTime =
+            Time.time - pullStartTime;
 
-        float chargePercent = holdTime / maxHoldTime;
+        holdTime =
+            Mathf.Clamp(
+                holdTime,
+                0f,
+                maxHoldTime
+            );
 
-        currentShootSpeed = Mathf.Lerp(
-            minSpeed,
-            maxSpeed,
-            chargePercent
-        );
+        float chargePercent =
+            holdTime / maxHoldTime;
+
+        currentShootSpeed =
+            Mathf.Lerp(
+                minSpeed,
+                maxSpeed,
+                chargePercent
+            );
 
         slingStringNormal.SetActive(true);
         slingStringPull.SetActive(false);
@@ -87,35 +137,83 @@ public class ShootController : MonoBehaviour
         animator.SetTrigger(AttackRelease);
     }
 
-    //Called via animation event during Attack_Release
+
+    // ============================================================
+    // ANIMATION EVENT
+    // ============================================================
 
     public void FinishRelease()
     {
         aimCursor.SetNormal();
     }
 
+
     // Called by Animation Event during Attack_Release
     public void Shoot()
     {
-        Vector2 mouseScreenPosition = Mouse.current.position.ReadValue();
+        // Safety check in case something changed
+        // between Release and the animation event.
+        if (currentRocks <= 0)
+            return;
 
-        Vector3 mouseWorldPosition = mainCamera.ScreenToWorldPoint(
-            new Vector3(
-                mouseScreenPosition.x,
-                mouseScreenPosition.y,
-                -mainCamera.transform.position.z
-            )
+        Vector2 mouseScreenPosition =
+            Mouse.current.position.ReadValue();
+
+        Vector3 mouseWorldPosition =
+            mainCamera.ScreenToWorldPoint(
+                new Vector3(
+                    mouseScreenPosition.x,
+                    mouseScreenPosition.y,
+                    -mainCamera.transform.position.z
+                )
+            );
+
+        Vector2 direction =
+            (
+                mouseWorldPosition -
+                firePoint.position
+            ).normalized;
+
+        RockProjectile rock =
+            Instantiate(
+                rockPrefab,
+                firePoint.position,
+                Quaternion.identity
+            );
+
+        rock.Initialize(
+            direction,
+            currentShootSpeed
         );
 
-        /**/Vector2 direction =
-            (mouseWorldPosition - firePoint.position).normalized;
+        // Consume the rock ONLY when the projectile
+        // has actually been created.
+        currentRocks--;
 
-        RockProjectile rock = Instantiate(
-            rockPrefab,
-            firePoint.position,
-            Quaternion.identity
+        OnRocksChanged?.Invoke(
+            currentRocks
         );
+    }
 
-        rock.Initialize(direction, currentShootSpeed);
+
+    // ============================================================
+    // ROCK MANAGEMENT
+    // ============================================================
+
+    public void AddRocks(int amount)
+    {
+        if (amount <= 0)
+            return;
+
+        currentRocks += amount;
+
+        OnRocksChanged?.Invoke(
+            currentRocks
+        );
+    }
+
+    public bool HasRocks()
+    {
+        return currentRocks > 0;
     }
 }

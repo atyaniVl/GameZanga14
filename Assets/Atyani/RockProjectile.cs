@@ -10,5 +10,7 @@ public class RockProjectile : MonoBehaviour
         direction.Normalize();
 
         rb.linearVelocity = direction * speed;
+
+        Destroy(gameObject, 5f);
     }
 }

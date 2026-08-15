@@ -4,7 +4,7 @@
 using UnityEngine.InputSystem;
 #endif
 
-using MoreMountains.Feedbacks; // استدعاء حزمة Feel مباشرة
+using MoreMountains.Feedbacks;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
@@ -23,6 +23,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float airDeceleration = 20f;
 
     [SerializeField] private float airControl = 1f;
+
+    [SerializeField] private Animator animator;
+
+    private static readonly int IsWalking =
+        Animator.StringToHash("isWalking");
 
 
     // ============================================================
@@ -89,35 +94,26 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Feel Feedbacks - Jump & Air")]
 
-    [Tooltip("Played when the player jumps.")]
     [SerializeField] private MMF_Player jumpFeedback;
 
-    [Tooltip("Played when the player cuts their jump early.")]
     [SerializeField] private MMF_Player jumpCutFeedback;
 
-    [Tooltip("Played when the player lands on the ground.")]
     [SerializeField] private MMF_Player landFeedback;
 
     [Header("Feel Feedbacks - Movement")]
 
-    [Tooltip("Played continuously or looped while walking on ground.")]
     [SerializeField] private MMF_Player walkFeedback;
 
-    [Tooltip("Played once when the player comes to a complete stop on ground.")]
     [SerializeField] private MMF_Player stopFeedback;
 
-    [Tooltip("Played when the player changes movement direction.")]
     [SerializeField] private MMF_Player turnFeedback;
 
     [Header("Feel Feedbacks - Ladder")]
 
-    [Tooltip("Played when the player starts climbing.")]
     [SerializeField] private MMF_Player climbStartFeedback;
 
-    [Tooltip("Played when the player stops climbing.")]
     [SerializeField] private MMF_Player climbStopFeedback;
 
-    [Tooltip("Played periodically while moving up/down a ladder.")]
     [SerializeField] private MMF_Player climbStepFeedback;
 
 
@@ -151,13 +147,12 @@ public class PlayerMovement : MonoBehaviour
     // PUBLIC PROPERTIES
     // ============================================================
 
-    public bool FacingRight { get; private set; } = true;
-
     public bool IsGrounded => isGrounded;
 
     public bool IsClimbing => isClimbing;
 
-    public float CurrentSpeed => rb != null ? rb.linearVelocity.x : 0f;
+    public float CurrentSpeed =>
+        rb != null ? rb.linearVelocity.x : 0f;
 
     public float MoveInput => moveInput;
 
@@ -256,14 +251,16 @@ public class PlayerMovement : MonoBehaviour
 
 #if ENABLE_LEGACY_INPUT_MANAGER
 
-        float legacyHorizontal = Input.GetAxisRaw("Horizontal");
+        float legacyHorizontal =
+            Input.GetAxisRaw("Horizontal");
 
         if (legacyHorizontal != 0f)
         {
             horizontal = legacyHorizontal;
         }
 
-        float legacyVertical = Input.GetAxisRaw("Vertical");
+        float legacyVertical =
+            Input.GetAxisRaw("Vertical");
 
         if (legacyVertical != 0f)
         {
@@ -286,7 +283,13 @@ public class PlayerMovement : MonoBehaviour
 
         SetMoveInput(horizontal);
 
-        verticalInput = Mathf.Clamp(vertical, -1f, 1f);
+        verticalInput =
+            Mathf.Clamp(vertical, -1f, 1f);
+
+        animator.SetBool(
+            IsWalking,
+            Mathf.Abs(moveInput) > 0.01f
+        );
 
         if (jumpPressed)
         {
@@ -316,8 +319,6 @@ public class PlayerMovement : MonoBehaviour
             HandleJump();
         }
 
-        HandleFacing();
-
         wasGrounded = isGrounded;
     }
 
@@ -330,11 +331,13 @@ public class PlayerMovement : MonoBehaviour
     {
         rb.gravityScale = originalGravity;
 
-        float targetSpeed = moveInput * maxMoveSpeed;
+        float targetSpeed =
+            moveInput * maxMoveSpeed;
 
         float acceleration;
 
-        bool hasInput = Mathf.Abs(moveInput) > 0.01f;
+        bool hasInput =
+            Mathf.Abs(moveInput) > 0.01f;
 
         if (isGrounded)
         {
@@ -382,18 +385,15 @@ public class PlayerMovement : MonoBehaviour
         if (isClimbing)
             return;
 
-        // Execute jump
         rb.linearVelocity = new Vector2(
             rb.linearVelocity.x,
             jumpForce
         );
 
-        // Reset jump state
         jumpRequested = false;
         jumpBufferTimer = 0f;
         coyoteTimer = 0f;
 
-        // Feel
         PlayFeedback(jumpFeedback);
     }
 
@@ -462,7 +462,6 @@ public class PlayerMovement : MonoBehaviour
             groundLayer
         ) != null;
 
-        // LANDING DETECTION
         if (isGrounded && !wasGrounded)
         {
             PlayFeedback(landFeedback);
@@ -566,7 +565,8 @@ public class PlayerMovement : MonoBehaviour
     {
         rb.gravityScale = 0f;
 
-        if (isGrounded && Mathf.Abs(moveInput) >= ladderExitInput)
+        if (isGrounded &&
+            Mathf.Abs(moveInput) >= ladderExitInput)
         {
             StopClimbing();
 
@@ -582,7 +582,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (Mathf.Abs(verticalInput) > 0.1f)
         {
-            climbDistanceTracker += climbSpeed * Time.fixedDeltaTime;
+            climbDistanceTracker +=
+                climbSpeed * Time.fixedDeltaTime;
 
             if (climbDistanceTracker >= climbStepInterval)
             {
@@ -598,72 +599,44 @@ public class PlayerMovement : MonoBehaviour
 
 
     // ============================================================
-    // FACING
-    // ============================================================
-
-    private void HandleFacing()
-    {
-        if (isClimbing && !isGrounded)
-            return;
-
-        if (moveInput > 0.01f && !FacingRight)
-        {
-            Flip();
-        }
-        else if (moveInput < -0.01f && FacingRight)
-        {
-            Flip();
-        }
-    }
-
-
-    // ============================================================
-    // FLIP
-    // ============================================================
-
-    private void Flip()
-    {
-        FacingRight = !FacingRight;
-
-        if (visual == null)
-            return;
-
-        Vector3 scale = visual.localScale;
-
-        scale.x *= -1f;
-
-        visual.localScale = scale;
-
-        PlayFeedback(turnFeedback);
-    }
-
-
-    // ============================================================
-    // MOVEMENT & STOP FEEDBACKS
+    // MOVEMENT FEEDBACKS
     // ============================================================
 
     private void HandleMovementFeedbacks()
     {
-        bool isMovingHorizontally = Mathf.Abs(rb.linearVelocity.x) > 0.1f && Mathf.Abs(moveInput) > 0.01f;
+        bool isMovingHorizontally =
+            Mathf.Abs(rb.linearVelocity.x) > 0.1f &&
+            Mathf.Abs(moveInput) > 0.01f;
 
-        if (isGrounded && isMovingHorizontally && !isClimbing)
+        if (isGrounded &&
+            isMovingHorizontally &&
+            !isClimbing)
         {
-            if (walkFeedback != null && !walkFeedback.IsPlaying)
+            if (walkFeedback != null &&
+                !walkFeedback.IsPlaying)
             {
-                walkFeedback.PlayFeedbacks(transform.position);
+                walkFeedback.PlayFeedbacks(
+                    transform.position
+                );
             }
         }
         else
         {
-            if (walkFeedback != null && walkFeedback.IsPlaying)
+            if (walkFeedback != null &&
+                walkFeedback.IsPlaying)
             {
                 walkFeedback.StopFeedbacks();
             }
         }
 
-        if (isGrounded && wasGrounded && Mathf.Abs(rb.linearVelocity.x) < 0.05f && Mathf.Abs(moveInput) < 0.01f)
+        if (isGrounded &&
+            wasGrounded &&
+            Mathf.Abs(rb.linearVelocity.x) < 0.05f &&
+            Mathf.Abs(moveInput) < 0.01f)
         {
-            if (stopFeedback != null && !stopFeedback.IsPlaying && Mathf.Abs(rb.linearVelocity.x) > 0.01f)
+            if (stopFeedback != null &&
+                !stopFeedback.IsPlaying &&
+                Mathf.Abs(rb.linearVelocity.x) > 0.01f)
             {
                 PlayFeedback(stopFeedback);
             }
@@ -683,7 +656,6 @@ public class PlayerMovement : MonoBehaviour
             1f
         );
     }
-
 
     public void RequestJump()
     {
