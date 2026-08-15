@@ -8,6 +8,8 @@ TagManager:
   - MapPiece
   - PlayerProjectile
   - EnemyProjectile
+  - Rock
+  - Heart
   layers:
   - Default
   - TransparentFX

@@ -48,6 +48,8 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
 
+    private static readonly int IsGroundedAnim =
+        Animator.StringToHash("isGrounded");
 
     // ============================================================
     // LADDER
@@ -291,6 +293,8 @@ public class PlayerMovement : MonoBehaviour
             Mathf.Abs(moveInput) > 0.01f
         );
 
+
+
         if (jumpPressed)
         {
             RequestJump();
@@ -390,6 +394,7 @@ public class PlayerMovement : MonoBehaviour
             jumpForce
         );
 
+
         jumpRequested = false;
         jumpBufferTimer = 0f;
         coyoteTimer = 0f;
@@ -461,6 +466,11 @@ public class PlayerMovement : MonoBehaviour
             groundCheckRadius,
             groundLayer
         ) != null;
+
+        animator.SetBool(
+IsGroundedAnim,
+isGrounded
+);
 
         if (isGrounded && !wasGrounded)
         {
