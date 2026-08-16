@@ -1,4 +1,5 @@
 using UnityEngine;
+using AudioSystem;
 
 public class DroneAttack : EnemyAttack
 {
@@ -60,5 +61,7 @@ public class DroneAttack : EnemyAttack
             spawnPoint.position,
             Quaternion.identity
         );
+
+        AudioManager.Instance?.PlaySfxAtPosition("DroneDrop", spawnPoint.position);
     }
 }

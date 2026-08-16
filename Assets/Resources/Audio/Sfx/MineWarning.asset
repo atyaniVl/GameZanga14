@@ -1,0 +1,11 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: a9921b6925bbb3e49b04a4649760cb46, type: 3}
+  m_Name: MineWarning
+  id: MineWarning
+  clip: {fileID: 8300000, guid: 1e6e728ba2504aa1b0e281ad0e1e96c2, type: 3}
+  volume: 0.7
+  loop: 0
+  mixerGroup: {fileID: 0}

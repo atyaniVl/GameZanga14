@@ -1,4 +1,5 @@
 using System.Collections;
+using AudioSystem;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
@@ -42,6 +43,8 @@ public class Mine : MonoBehaviour
     {
         isTriggered = true;
 
+        AudioManager.Instance?.PlaySfxAtPosition("MineWarning", transform.position);
+
         StartCoroutine(ExplosionCountdown());
     }
 
@@ -58,6 +61,8 @@ public class Mine : MonoBehaviour
             return;
 
         hasExploded = true;
+
+        AudioManager.Instance?.PlaySfxAtPosition("MineExplosion", transform.position);
 
         DamagePlayer();
 

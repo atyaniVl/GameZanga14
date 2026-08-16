@@ -1,4 +1,5 @@
 using UnityEngine;
+using AudioSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Collider2D))]
@@ -42,6 +43,8 @@ public class CannonProjectile : MonoBehaviour
 
     private void Hit(Collider2D target)
     {
+        AudioManager.Instance?.PlaySfxAtPosition("ProjectileImpact", transform.position);
+
         IDamageable damageable =
             target.GetComponentInParent<IDamageable>();
 

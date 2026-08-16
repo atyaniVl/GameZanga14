@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
-using ZombieDiner.Core;
 
 namespace AudioSystem
 {
@@ -19,10 +18,6 @@ namespace AudioSystem
         [SerializeField] private string masterVolumeParameter = "MasterVolume";
         [SerializeField] private string sfxVolumeParameter = "SfxVolume";
         [SerializeField] private string musicVolumeParameter = "MusicVolume";
-
-        [Header("Stage Music IDs")]
-        [SerializeField] private string normalStageMusicID = "NormalBGM";
-        [SerializeField] private string zombieStageMusicID = "ZombieBGM";
 
         [Header("Data")]
         [SerializeField] private List<SfxClipDataSO> sfxClips = new List<SfxClipDataSO>();
@@ -43,6 +38,16 @@ namespace AudioSystem
 
         public static AudioManager Instance { get; private set; }
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void CreateRuntimeInstance()
+        {
+            if (Instance != null)
+                return;
+
+            var audioManager = new GameObject("Audio Manager");
+            audioManager.AddComponent<AudioManager>();
+        }
+
         private void Awake()
         {
             if (Instance == null)
@@ -62,58 +67,29 @@ namespace AudioSystem
             LoadSettings();
         }
 
-        private void OnEnable()
-        {
-            GameManager.OnStageChanged += HandleStageMusic;
-        }
-
-        private void OnDisable()
-        {
-            GameManager.OnStageChanged -= HandleStageMusic;
-        }
-
-        private void Start()
-        {
-            // تشغيل موسيقى المرحلة الابتدائية بعد التأكد من تجهيز كل الـ AudioSources
-            if (GameManager.Instance != null)
-            {
-                HandleStageMusic(GameManager.Instance.CurrentStage);
-            }
-        }
-
-        private void HandleStageMusic(GameStage newStage)
-        {
-            switch (newStage)
-            {
-                case GameStage.Stage1_Normal:
-                    StopAllMusic();
-                    PlayMusic(normalStageMusicID, false);
-                    break;
-
-                case GameStage.Stage2_Zombie:
-                    StopAllMusic();
-                    PlayMusic(zombieStageMusicID, false);
-                    break;
-
-                case GameStage.GameOver:
-                    StopAllMusic();
-                    break;
-            }
-        }
-
         public void PlaySfx(string id)
         {
-            PlaySfxInternal(id, 1f, false, 0f, 0f);
+            PlaySfxInternal(id, 1f, false, 0f, 0f, false, Vector3.zero);
         }
 
         public void PlaySfx(string id, float pitch)
         {
-            PlaySfxInternal(id, pitch, false, 0f, 0f);
+            PlaySfxInternal(id, pitch, false, 0f, 0f, false, Vector3.zero);
         }
 
         public void PlaySfxRandomPitch(string id, float minPitch, float maxPitch)
         {
-            PlaySfxInternal(id, 1f, true, minPitch, maxPitch);
+            PlaySfxInternal(id, 1f, true, minPitch, maxPitch, false, Vector3.zero);
+        }
+
+        public void PlaySfxAtPosition(string id, Vector3 position)
+        {
+            PlaySfxInternal(id, 1f, false, 0f, 0f, true, position);
+        }
+
+        public void PlaySfxAtPositionRandomPitch(string id, Vector3 position, float minPitch, float maxPitch)
+        {
+            PlaySfxInternal(id, 1f, true, minPitch, maxPitch, true, position);
         }
 
         public void PlayMusic(string id, bool restart = true)
@@ -220,7 +196,7 @@ namespace AudioSystem
             PlayerPrefs.Save();
         }
 
-        private void PlaySfxInternal(string id, float pitch, bool randomPitch, float minPitch, float maxPitch)
+        private void PlaySfxInternal(string id, float pitch, bool randomPitch, float minPitch, float maxPitch, bool is3D, Vector3 position)
         {
             if (!sfxEnabled)
                 return;
@@ -241,12 +217,21 @@ namespace AudioSystem
             source.volume = clipData.Volume;
             source.outputAudioMixerGroup = clipData.MixerGroup;
             source.pitch = randomPitch ? Random.Range(minPitch, maxPitch) : pitch;
+            source.spatialBlend = is3D ? 1f : 0f;
+            source.rolloffMode = AudioRolloffMode.Logarithmic;
+            source.minDistance = clipData.MinDistance;
+            source.maxDistance = Mathf.Max(clipData.MaxDistance, clipData.MinDistance);
+            source.dopplerLevel = 0f;
+
+            if (is3D)
+                source.transform.position = position;
 
             source.Play();
         }
 
         private void BuildLookup()
         {
+            AddResourceSfxClips();
             sfxLookup.Clear();
             foreach (var clip in sfxClips)
             {
@@ -265,6 +250,15 @@ namespace AudioSystem
 
                 if (!musicLookup.ContainsKey(clip.Id))
                     musicLookup.Add(clip.Id, clip);
+            }
+        }
+
+        private void AddResourceSfxClips()
+        {
+            foreach (var clip in Resources.LoadAll<SfxClipDataSO>("Audio/Sfx"))
+            {
+                if (clip != null && !sfxClips.Contains(clip))
+                    sfxClips.Add(clip);
             }
         }
 

@@ -1,0 +1,11 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: a9921b6925bbb3e49b04a4649760cb46, type: 3}
+  m_Name: MineExplosion
+  id: MineExplosion
+  clip: {fileID: 8300000, guid: 25f27cfc066d4b2dbab2d05aee72e7ee, type: 3}
+  volume: 0.9
+  loop: 0
+  mixerGroup: {fileID: 0}

@@ -1,0 +1,11 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: a9921b6925bbb3e49b04a4649760cb46, type: 3}
+  m_Name: PlayerLand
+  id: PlayerLand
+  clip: {fileID: 8300000, guid: 1860ae8c11b84b3f88ff7569173d05f6, type: 3}
+  volume: 0.5
+  loop: 0
+  mixerGroup: {fileID: 0}

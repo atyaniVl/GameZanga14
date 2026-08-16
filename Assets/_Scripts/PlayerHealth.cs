@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using AudioSystem;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour, IDamageable
@@ -81,6 +82,8 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         );
 
         OnDamaged?.Invoke();
+
+        AudioManager.Instance?.PlaySfxAtPosition("PlayerHit", transform.position);
 
         PlayDamageFlash();
 
@@ -184,6 +187,8 @@ public class PlayerHealth : MonoBehaviour, IDamageable
             return;
 
         IsDead = true;
+
+        AudioManager.Instance?.PlaySfxAtPosition("PlayerDeath", transform.position);
 
         OnDeath?.Invoke();
     }

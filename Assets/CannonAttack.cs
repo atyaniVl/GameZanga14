@@ -1,4 +1,5 @@
 using UnityEngine;
+using AudioSystem;
 
 public class CannonAttack : EnemyAttack
 {
@@ -158,6 +159,8 @@ public class CannonAttack : EnemyAttack
             direction,
             projectileSpeed
         );
+
+        AudioManager.Instance?.PlaySfxAtPositionRandomPitch("CannonFire", firePoint.position, 0.94f, 1.06f);
     }
 
 

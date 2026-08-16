@@ -1,4 +1,5 @@
 using UnityEngine;
+using AudioSystem;
 
 public class EnemyHealth : MonoBehaviour
 {
@@ -21,9 +22,12 @@ public class EnemyHealth : MonoBehaviour
 
         currentHealth -= damage;
 
+        AudioManager.Instance?.PlaySfxAtPositionRandomPitch("EnemyHit", transform.position, 0.9f, 1.1f);
+
         if (currentHealth <= 0)
         {
             Debug.Log($"{gameObject.name} DIED!");
+            AudioManager.Instance?.PlaySfxAtPosition("EnemyDeath", transform.position);
             Die();
         }
     }

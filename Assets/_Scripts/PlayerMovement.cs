@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 #endif
 
 using MoreMountains.Feedbacks;
+using AudioSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
@@ -400,6 +401,7 @@ public class PlayerMovement : MonoBehaviour
         coyoteTimer = 0f;
 
         PlayFeedback(jumpFeedback);
+        AudioManager.Instance?.PlaySfxAtPosition("PlayerJump", transform.position);
     }
 
 
@@ -475,6 +477,7 @@ isGrounded
         if (isGrounded && !wasGrounded)
         {
             PlayFeedback(landFeedback);
+            AudioManager.Instance?.PlaySfxAtPositionRandomPitch("PlayerLand", transform.position, 0.95f, 1.05f);
         }
     }
 
@@ -542,6 +545,7 @@ isGrounded
         climbDistanceTracker = 0f;
 
         PlayFeedback(climbStartFeedback);
+        AudioManager.Instance?.PlaySfxAtPosition("PlayerClimb", transform.position);
     }
 
 
@@ -600,6 +604,7 @@ isGrounded
                 climbDistanceTracker = 0f;
 
                 PlayFeedback(climbStepFeedback);
+                AudioManager.Instance?.PlaySfxAtPositionRandomPitch("PlayerClimb", transform.position, 0.95f, 1.05f);
             }
         }
 

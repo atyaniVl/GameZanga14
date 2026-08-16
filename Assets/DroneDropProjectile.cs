@@ -1,4 +1,5 @@
 using UnityEngine;
+using AudioSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Collider2D))]
@@ -48,6 +49,8 @@ public class DroneDropProjectile : MonoBehaviour
             return;
 
         exploded = true;
+
+        AudioManager.Instance?.PlaySfxAtPosition("DroneExplosion", transform.position);
 
         DamagePlayers();
 

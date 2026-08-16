@@ -1,4 +1,5 @@
 using System;
+using AudioSystem;
 using UnityEngine;
 
 public class PlayerCollector : MonoBehaviour
@@ -86,6 +87,8 @@ public class PlayerCollector : MonoBehaviour
     {
         KeysCollected++;
 
+        AudioManager.Instance?.PlaySfxAtPosition("PickupKey", pickup.transform.position);
+
         OnKeyCollected?.Invoke(
             KeysCollected
         );
@@ -115,6 +118,8 @@ public class PlayerCollector : MonoBehaviour
 
         RocksCollected += rocksPerPickup;
 
+        AudioManager.Instance?.PlaySfxAtPositionRandomPitch("PickupRock", pickup.transform.position, 0.94f, 1.06f);
+
         OnRocksCollected?.Invoke(
             RocksCollected
         );
@@ -141,6 +146,8 @@ public class PlayerCollector : MonoBehaviour
         playerHealth.Heal(
             healthPerPickup
         );
+
+        AudioManager.Instance?.PlaySfxAtPosition("PickupHealth", pickup.transform.position);
 
         OnHealthPickup?.Invoke(
             healthPerPickup

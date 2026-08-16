@@ -1,0 +1,11 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_Script: {fileID: 11500000, guid: a9921b6925bbb3e49b04a4649760cb46, type: 3}
+  m_Name: PlayerHit
+  id: PlayerHit
+  clip: {fileID: 8300000, guid: 7c6f4d41a9cf4df68d8dd8eb4d82dbcf, type: 3}
+  volume: 0.65
+  loop: 0
+  mixerGroup: {fileID: 0}

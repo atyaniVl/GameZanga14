@@ -1,4 +1,5 @@
 using System;
+using AudioSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -102,6 +103,7 @@ public class ShootController : MonoBehaviour
         slingStringPull.SetActive(true);
 
         aimCursor.SetPull();
+        AudioManager.Instance?.PlaySfxAtPosition("SlingPull", transform.position);
     }
 
 
@@ -185,6 +187,8 @@ public class ShootController : MonoBehaviour
             direction,
             currentShootSpeed
         );
+
+        AudioManager.Instance?.PlaySfxAtPositionRandomPitch("PlayerFire", firePoint.position, 0.92f, 1.08f);
 
         // Consume the rock ONLY when the projectile
         // has actually been created.
