@@ -83,6 +83,7 @@ public class DroneDropProjectile : MonoBehaviour
         }
 
         projectileVisual.SetActive(false);
+        GetComponent<Collider2D>().enabled = false;
         Destroy(gameObject, 5);
     }
 

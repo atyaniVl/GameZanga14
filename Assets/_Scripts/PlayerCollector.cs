@@ -3,25 +3,149 @@ using UnityEngine;
 
 public class PlayerCollector : MonoBehaviour
 {
+    [Header("References")]
+    [SerializeField] private ShootController shootController;
+    [SerializeField] private PlayerHealth playerHealth;
+
+    [Header("Pickup Values")]
+    [SerializeField] private int rocksPerPickup = 5;
+    [SerializeField] private float healthPerPickup = 30f;
+    [SerializeField] private ParticleSystem heartPickupParticles;
+    [SerializeField] private ParticleSystem keyPickupParticles;
+    [SerializeField] private ParticleSystem rocksPickupParticles;
+
+    // ============================================================
+    // COLLECTED DATA
+    // ============================================================
+
     public int KeysCollected { get; private set; } = 0;
-    public int MapPiecesCollected { get; private set; } = 0;
+
+    public int RocksCollected { get; private set; } = 0;
+
+    // ============================================================
+    // EVENTS
+    // ============================================================
 
     public event Action<int> OnKeyCollected;
-    public event Action<int> OnMapPieceCollected;
+    public event Action<int> OnRocksCollected;
+    public event Action<float> OnHealthPickup;
+
+
+    // ============================================================
+    // INITIALIZATION
+    // ============================================================
+
+    private void Awake()
+    {
+        if (shootController == null)
+        {
+            shootController =
+                GetComponent<ShootController>();
+        }
+
+        if (playerHealth == null)
+        {
+            playerHealth =
+                GetComponent<PlayerHealth>();
+        }
+    }
+
+
+    // ============================================================
+    // COLLECTION
+    // ============================================================
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Key"))
         {
-            KeysCollected++;
-            OnKeyCollected?.Invoke(KeysCollected);
-            Destroy(other.gameObject);
+            CollectKey(other);
+            keyPickupParticles.gameObject.transform.position = other.transform.position;
+            keyPickupParticles.Play();
         }
-        else if (other.CompareTag("MapPiece"))
+        else if (other.CompareTag("Rock"))
         {
-            MapPiecesCollected++;
-            OnMapPieceCollected?.Invoke(MapPiecesCollected);
-            Destroy(other.gameObject);
+            CollectRocks(other);
+            rocksPickupParticles.gameObject.transform.position = other.transform.position;
+            rocksPickupParticles.Play();
         }
+        else if (other.CompareTag("Heart"))
+        {
+            CollectHeart(other);
+            heartPickupParticles.gameObject.transform.position = other.transform.position;
+            heartPickupParticles.Play();
+        }
+    }
+
+
+    // ============================================================
+    // KEY
+    // ============================================================
+
+    private void CollectKey(Collider2D pickup)
+    {
+        KeysCollected++;
+
+        OnKeyCollected?.Invoke(
+            KeysCollected
+        );
+
+        Destroy(pickup.gameObject);
+    }
+
+
+    // ============================================================
+    // ROCKS
+    // ============================================================
+
+    private void CollectRocks(Collider2D pickup)
+    {
+        if (shootController == null)
+        {
+            Debug.LogWarning(
+                "PlayerCollector: ShootController is not assigned."
+            );
+
+            return;
+        }
+
+        shootController.AddRocks(
+            rocksPerPickup
+        );
+
+        RocksCollected += rocksPerPickup;
+
+        OnRocksCollected?.Invoke(
+            RocksCollected
+        );
+
+        Destroy(pickup.gameObject);
+    }
+
+
+    // ============================================================
+    // HEART
+    // ============================================================
+
+    private void CollectHeart(Collider2D pickup)
+    {
+        if (playerHealth == null)
+        {
+            Debug.LogWarning(
+                "PlayerCollector: PlayerHealth is not assigned."
+            );
+
+            return;
+        }
+
+        playerHealth.Heal(
+            healthPerPickup
+        );
+
+        OnHealthPickup?.Invoke(
+            healthPerPickup
+        );
+
+        Destroy(pickup.gameObject);
     }
 }

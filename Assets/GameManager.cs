@@ -7,19 +7,23 @@ public class GameManager : MonoBehaviour
     [Header("Player")]
     [SerializeField] private PlayerHealth playerHealth;
     [SerializeField] private ShootController shootController;
+    [SerializeField] private PlayerCollector playerCollector;
 
     [Header("UI")]
     [SerializeField] private Slider healthSlider;
     [SerializeField] private TMP_Text rocksText;
+    [SerializeField] private TMP_Text keysText;
 
 
     private void Start()
     {
         SetupHealthUI();
         SetupRocksUI();
+        SetupKeysUI();
 
         playerHealth.OnHealthChanged += UpdateHealthUI;
         shootController.OnRocksChanged += UpdateRocksUI;
+        playerCollector.OnKeyCollected += UpdateKeysUI;
     }
 
 
@@ -35,6 +39,12 @@ public class GameManager : MonoBehaviour
         {
             shootController.OnRocksChanged -=
                 UpdateRocksUI;
+        }
+
+        if (playerCollector != null)
+        {
+            playerCollector.OnKeyCollected -=
+                UpdateKeysUI;
         }
     }
 
@@ -96,5 +106,30 @@ public class GameManager : MonoBehaviour
 
         rocksText.text =
             rocks.ToString();
+    }
+
+
+    // ============================================================
+    // KEYS
+    // ============================================================
+
+    private void SetupKeysUI()
+    {
+        if (playerCollector == null)
+            return;
+
+        UpdateKeysUI(
+            playerCollector.KeysCollected
+        );
+    }
+
+
+    private void UpdateKeysUI(int keys)
+    {
+        if (keysText == null)
+            return;
+
+        keysText.text =
+            keys.ToString();
     }
 }
